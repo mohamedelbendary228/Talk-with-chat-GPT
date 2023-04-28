@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:talk_with_gpt/colors.dart';
+import 'package:talk_with_gpt/utils/colors.dart';
 
 class ChatBubble extends StatelessWidget {
   const ChatBubble({Key? key}) : super(key: key);

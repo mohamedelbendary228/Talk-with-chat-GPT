@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:talk_with_gpt/colors.dart';
+import 'package:talk_with_gpt/utils/colors.dart';
 
 class VirtualAssistantPicture extends StatelessWidget {
   const VirtualAssistantPicture({Key? key}) : super(key: key);

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:talk_with_gpt/colors.dart';
+import 'package:talk_with_gpt/utils/colors.dart';
 import 'package:talk_with_gpt/widgets/chat_bubble.dart';
 import 'package:talk_with_gpt/widgets/feature_box.dart';
 import 'package:talk_with_gpt/widgets/virtual_assistant_picture.dart';
