@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:talk_with_gpt/Service/openai_service.dart';
 import 'package:talk_with_gpt/utils/colors.dart';
 import 'package:talk_with_gpt/widgets/chat_bubble.dart';
 import 'package:talk_with_gpt/widgets/feature_box.dart';
@@ -16,6 +17,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final SpeechToText speechToText = SpeechToText();
   String lastWords = "";
+  final OpenAIService openAIService = OpenAIService();
 
   @override
   void initState() {
@@ -29,7 +31,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> startListening() async {
-    await speechToText.listen(onResult: onSpeechResult);
+    var locales = await speechToText.locales();
+    await speechToText.listen(
+        onResult: onSpeechResult, localeId: locales[42].localeId);
     setState(() {});
   }
 
@@ -42,6 +46,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       lastWords = result.recognizedWords;
     });
+    print("lastWords $lastWords");
   }
 
   @override
@@ -56,15 +61,20 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           if (await speechToText.hasPermission && speechToText.isNotListening) {
+            print("startListening()");
             await startListening();
           } else if (speechToText.isListening) {
+            await openAIService.isArtPromptAPI(lastWords);
+            print("stopListening()");
             await stopListening();
           } else {
             initSpeechToText();
           }
         },
         backgroundColor: Pallete.firstSuggestionBoxColor,
-        child: const Icon(Icons.mic),
+        child: speechToText.isNotListening
+            ? const Icon(Icons.mic)
+            : const Icon(Icons.stop),
       ),
       appBar: AppBar(
         centerTitle: true,
@@ -114,6 +124,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
+            const SizedBox(height: 70),
           ],
         ),
       ),

@@ -59,12 +59,17 @@ class DioClient {
   }) async {
     try {
       debugPrint("POST url: $uri, with parameters: $queryParameters");
-      Options opts = Options(headers: await getHeaders());
+      Options opts = Options(
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $openAIAPIKey"
+        },
+      );
       final Response response = await _dio.post(
         uri,
         data: data,
         queryParameters: queryParameters,
-        options: options ?? opts,
+        options: opts,
         cancelToken: cancelToken,
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
