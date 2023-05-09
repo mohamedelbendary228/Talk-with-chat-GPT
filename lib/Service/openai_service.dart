@@ -92,6 +92,7 @@ class OpenAIService {
 
   //API to generate an image
   Future<String> dallEAPI(String prompt) async {
+    
     messages.add(
       {
         "role": "user",
