@@ -1,2 +1,2 @@
 const String openAIAPIKey = //Add your APIKey
-    "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";
+    "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";

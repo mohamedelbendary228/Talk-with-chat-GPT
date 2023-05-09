@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:talk_with_gpt/utils/colors.dart';
 import 'package:talk_with_gpt/screens/home_page.dart';
+import 'package:talk_with_gpt/utils/dio_client.dart';
 
-void main() {
+void main(){
   runApp(const MyApp());
 }
 
@@ -16,13 +17,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Talk with GPT',
       locale: const Locale("en"),
-
       theme: ThemeData.light(useMaterial3: true).copyWith(
         scaffoldBackgroundColor: Pallete.whiteColor,
         appBarTheme: const AppBarTheme(
           backgroundColor: Pallete.whiteColor,
         ),
-
       ),
       home: const HomePage(),
     );

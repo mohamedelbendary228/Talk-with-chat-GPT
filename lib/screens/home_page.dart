@@ -32,8 +32,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> startListening() async {
     var locales = await speechToText.locales();
-    await speechToText.listen(
-        onResult: onSpeechResult, localeId: locales[42].localeId);
+    await speechToText.listen(onResult: onSpeechResult);
     setState(() {});
   }
 
@@ -46,7 +45,21 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       lastWords = result.recognizedWords;
     });
-    print("lastWords $lastWords");
+    debugPrint("lastWords $lastWords");
+  }
+
+  void onTapRecordButton() async {
+    if (await speechToText.hasPermission && speechToText.isNotListening) {
+      debugPrint("startListening()");
+      await startListening();
+    } else if (speechToText.isListening) {
+      final speech = await openAIService.isArtPromptAPI(lastWords);
+      debugPrint("Speech: $speech");
+      debugPrint("stopListening()");
+      await stopListening();
+    } else {
+      initSpeechToText();
+    }
   }
 
   @override
@@ -58,24 +71,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          if (await speechToText.hasPermission && speechToText.isNotListening) {
-            print("startListening()");
-            await startListening();
-          } else if (speechToText.isListening) {
-            await openAIService.isArtPromptAPI(lastWords);
-            print("stopListening()");
-            await stopListening();
-          } else {
-            initSpeechToText();
-          }
-        },
-        backgroundColor: Pallete.firstSuggestionBoxColor,
-        child: speechToText.isNotListening
-            ? const Icon(Icons.mic)
-            : const Icon(Icons.stop),
-      ),
       appBar: AppBar(
         centerTitle: true,
         title: const Text("MAB"),
@@ -127,6 +122,13 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 70),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: onTapRecordButton,
+        backgroundColor: Pallete.firstSuggestionBoxColor,
+        child: speechToText.isNotListening
+            ? const Icon(Icons.mic)
+            : const Icon(Icons.stop),
       ),
     );
   }

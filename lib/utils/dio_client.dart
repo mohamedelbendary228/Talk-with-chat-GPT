@@ -9,10 +9,22 @@ class DioClient {
   static const int receiveTimeout = 30000;
   static const int connectionTimeout = 30000;
 
-  final Dio _dio = Dio(BaseOptions(
-    connectTimeout: const Duration(milliseconds: connectionTimeout),
-    receiveTimeout: const Duration(milliseconds: receiveTimeout),
-  ));
+  final Dio _dio = Dio(
+    BaseOptions(
+      connectTimeout: const Duration(milliseconds: connectionTimeout),
+      receiveTimeout: const Duration(milliseconds: receiveTimeout),
+    ),
+  )..interceptors.add(
+      LogInterceptor(
+        request: true,
+        requestBody: true,
+        requestHeader: true,
+        responseHeader: true,
+        responseBody: true,
+        error: true,
+        logPrint: (object) => debugPrint(object.toString()),
+      ),
+    );
 
   // Headers: --------------------------------------
   Future<Map<String, dynamic>?> getHeaders() async {
@@ -30,7 +42,6 @@ class DioClient {
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
   ) async {
-    debugPrint("GET url: $uri");
     Options opts = Options(headers: await getHeaders());
     try {
       final Response response = await _dio.get(
@@ -39,7 +50,6 @@ class DioClient {
         cancelToken: cancelToken,
         onReceiveProgress: onReceiveProgress,
       );
-      debugPrint("$uri ResponseCode: ${response.statusCode}");
       return response;
     } catch (e) {
       debugPrint(e.toString());
@@ -74,10 +84,8 @@ class DioClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-      debugPrint("$uri ResponseCode: ${response.statusCode}");
       return response;
     } catch (e) {
-      debugPrint(e.toString());
       rethrow;
     }
   }
