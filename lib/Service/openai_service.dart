@@ -49,7 +49,7 @@ class OpenAIService {
     }
   }
 
-  //generate a text
+  //APT to generate a text
   Future<String> chatGPTAPT(String prompt) async {
     //Store whatever the user says to got the messages history
     messages.add(
@@ -90,8 +90,35 @@ class OpenAIService {
     }
   }
 
-  //generate an image
+  //API to generate an image
   Future<String> dallEAPI(String prompt) async {
-    return "dallEAPI";
+    messages.add(
+      {
+        "role": "user",
+        "content": prompt,
+      },
+    );
+
+    FormData formData = FormData.fromMap({
+      "prompt": prompt,
+      "n": 1,
+    });
+
+    try {
+      final Response response = await _dioClient
+          .post("https://api.openai.com/v1/images/generations", data: formData);
+
+      if (response.statusCode == 200) {
+        String imageUrl = response.data["data"][0]["url"];
+        messages.add({
+          "role": "assistant",
+          "content": imageUrl,
+        });
+        return imageUrl;
+      }
+      return "An internal error occurred";
+    } on DioError catch (e) {
+      return e.toString();
+    }
   }
 }
