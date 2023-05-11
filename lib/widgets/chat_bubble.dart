@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:talk_with_gpt/utils/colors.dart';
 
 class ChatBubble extends StatelessWidget {
-  const ChatBubble({Key? key}) : super(key: key);
+  final String text;
+  final double fontSize;
+  const ChatBubble({Key? key, required this.text, required this.fontSize}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +20,13 @@ class ChatBubble extends StatelessWidget {
         borderRadius:
         BorderRadius.circular(20).copyWith(topLeft: Radius.zero),
       ),
-      child: const Padding(
-        padding: EdgeInsets.symmetric(vertical: 10),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
         child: Text(
-          "Good Morning, What task can I do for you?",
+          text,
           style: TextStyle(
               color: Pallete.mainFontColor,
-              fontSize: 25,
+              fontSize: fontSize,
               fontFamily: "Cera Pro"),
         ),
       ),
