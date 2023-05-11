@@ -19,7 +19,7 @@ class OpenAIService {
           "content":
               "Does this message want to generate an AI picture, image, art or anything similar? $prompt . Simply answer with a yes or no."
         }
-      ],
+      ]
     });
 
     try {
@@ -52,19 +52,15 @@ class OpenAIService {
   //APT to generate a text
   Future<String> chatGPTAPT(String prompt) async {
     //Store whatever the user says to got the messages history
-    messages.add(
-      {
-        "role": "user",
-        "content": prompt,
-      },
-    );
+    messages.add({
+      "role": "user",
+      "content": prompt,
+    });
 
-    FormData formData = FormData.fromMap(
-      {
-        "model": "gpt-3.5-turbo",
-        "messages": messages,
-      },
-    );
+    FormData formData = FormData.fromMap({
+      "model": "gpt-3.5-turbo",
+      "messages": messages,
+    });
 
     try {
       final Response response = await _dioClient
@@ -75,12 +71,10 @@ class OpenAIService {
         content = content.trim();
 
         //Store whatever the assistant says to got the messages history
-        messages.add(
-          {
-            "role": "assistant",
-            "content": content,
-          },
-        );
+        messages.add({
+          "role": "assistant",
+          "content": content,
+        });
 
         return content;
       }
@@ -92,13 +86,10 @@ class OpenAIService {
 
   //API to generate an image
   Future<String> dallEAPI(String prompt) async {
-    
-    messages.add(
-      {
-        "role": "user",
-        "content": prompt,
-      },
-    );
+    messages.add({
+      "role": "user",
+      "content": prompt,
+    });
 
     FormData formData = FormData.fromMap({
       "prompt": prompt,
